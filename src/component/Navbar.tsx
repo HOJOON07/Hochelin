@@ -10,7 +10,9 @@ export default function Navbar() {
   return (
     <>
       <div className="navbar">
-        <div className="navbar__logo">nextmap</div>
+        <Link href="/">
+          <div className="navbar__logo">nextmap</div>
+        </Link>
         <div className="navbar__list">
           {NAVLIST.map((item, idx) => {
             return (
