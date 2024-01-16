@@ -33,13 +33,19 @@ export default function Navbar() {
       </div>
       {isOpen && (
         <div className="navbar--mobile">
-          {NAVLIST.map((item, idx) => {
-            return (
-              <Link href={item.href} key={idx} className="navbar__list--item">
-                {item.children}
-              </Link>
-            );
-          })}
+          <div className="navbar__list--mobile">
+            {NAVLIST.map((item, idx) => {
+              return (
+                <Link
+                  href={item.href}
+                  key={idx}
+                  className="navbar__list--item--mobile"
+                >
+                  {item.children}
+                </Link>
+              );
+            })}
+          </div>
         </div>
       )}
     </>

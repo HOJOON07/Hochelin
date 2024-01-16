@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+.layout {
+  padding-top: 52px;
+}
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -29,7 +31,44 @@
 .navbar__button {
   display: none;
 }
+.navbar__list--item {
+  cursor: pointer;
+}
 
 .navbar__list--item:hover {
   color: darkgray;
+}
+
+@media only screen and (max-width: 600px) {
+  .navbar--mobile {
+    position: fixed;
+    width: 100%;
+    top: 52px;
+    background: darkblue;
+    color: white;
+    height: 100vh;
+  }
+
+  .navbar__list {
+    display: none;
+  }
+  .navbar__button {
+    display: block;
+    padding: 0px 18px;
+    cursor: pointer;
+  }
+  .navbar__list--item--mobile {
+    cursor: pointer;
+  }
+
+  .navbar__list--item--mobile:hover {
+    color: darkgray;
+  }
+  .navbar__list--mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: start;
+    padding: 24px 16px;
+  }
 }
