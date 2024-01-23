@@ -17,7 +17,7 @@ export default function Home({ stores }: { stores: StoreType[] }) {
     <>
       <Map setMap={setMap} />
       <Markers stores={stores} map={map} setCurrentStore={setCurrentStore} />
-      <StoreBox store={currentStore} setStore={setCurrentStore} />
+      <StoreBox store={currentStore!} setStore={setCurrentStore} />
     </>
   );
 }
