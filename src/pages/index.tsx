@@ -4,6 +4,7 @@ import Map from "@/components/Map";
 import Markers from "@/components/Markers";
 import StoreBox from "@/components/StoreBox";
 import { StoreType } from "@/interface";
+import axios from "axios";
 
 // import * as storeData from "@/data/store_data.json";
 import { useState } from "react";
@@ -17,18 +18,16 @@ export default function Home({ stores }: { stores: StoreType[] }) {
     <>
       <Map setMap={setMap} />
       <Markers stores={stores} map={map} setCurrentStore={setCurrentStore} />
-      <StoreBox store={currentStore!} setStore={setCurrentStore} />
+      <StoreBox store={currentStore} setStore={setCurrentStore} />
     </>
   );
 }
 
 export async function getStaticProps() {
-  const stores = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/stores`
-  ).then((res) => res.json());
+  const stores = await axios(`${process.env.NEXT_PUBLIC_API_URL}/api/stores`);
 
   return {
-    props: { stores },
+    props: { stores: stores.data },
     revalidate: 60 * 60,
   };
 }
