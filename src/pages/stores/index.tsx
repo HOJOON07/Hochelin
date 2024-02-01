@@ -57,7 +57,7 @@ export default function StoreListPage() {
                   {store.address}
                 </div>
                 <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
-                  {store?.phone || "번호없음"} | {store?.foodCertifyName} |{" "}
+                  {store?.phone || "번호없음"} | {store?.foodCertifyName}
                   {store?.category}
                 </div>
               </div>
