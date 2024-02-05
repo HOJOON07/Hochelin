@@ -73,7 +73,7 @@ export default function StoreListPage() {
       </ul>
       {stores?.totalPage && (
         <div className="py-6 w-full px-10 flex justify-center gap-3 bg-white my-10 flex-wrap text-black">
-          {stores?.totalPage > 10 ? (
+          {stores?.totalPage <= 10 ? (
             [...Array(stores?.totalPage)].map((x, i) => {
               return (
                 <Link
