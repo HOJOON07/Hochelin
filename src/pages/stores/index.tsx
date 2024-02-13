@@ -1,27 +1,55 @@
 import Loading from "@/components/Loading";
 import Pagination from "@/components/Pagination";
 import { StoreApiResonpse } from "@/interface";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import React from "react";
 
 export default function StoreListPage() {
   const router = useRouter();
   const { page = "1" }: any = router.query;
 
+  // const {
+  //   data: stores,
+  //   isError,
+  //   isLoading,
+  // } = useQuery({
+  //   queryKey: [`stores-${page}`],
+  //   queryFn: async () => {
+  //     const { data } = await axios(`api/stores?page=${page}`);
+  //     return data as StoreApiResonpse;
+  //   },
+  // });
+  const fetchStores = async ({ pageParam = 1 }) => {
+    const { data } = await axios("/api/stores?page=" + pageParam, {
+      params: {
+        limit: 10,
+        page: pageParam,
+      },
+    });
+    return data;
+  };
+
   const {
     data: stores,
+    isFetching,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
     isError,
     isLoading,
-  } = useQuery({
-    queryKey: [`stores-${page}`],
-    queryFn: async () => {
-      const { data } = await axios(`api/stores?page=${page}`);
-      return data as StoreApiResonpse;
-    },
+  } = useInfiniteQuery({
+    queryKey: ["stores"],
+    queryFn: fetchStores,
+    getNextPageParam: (lastPage: any) =>
+      lastPage.data?.length > 0 ? lastPage.page + 1 : undefined,
+    initialPageParam: 1,
   });
+
+  console.log(stores);
 
   if (isError) {
     return (
@@ -36,38 +64,40 @@ export default function StoreListPage() {
         {isLoading ? (
           <Loading />
         ) : (
-          stores?.data.map((store, index) => (
-            <li className="flex justify-between gap-x-6 py-5" key={index}>
-              <div className="flex gap-x-4">
-                <Image
-                  src={
-                    store?.category
-                      ? `/images/markers/${store?.category}.png`
-                      : "/images/markers/default.png"
-                  }
-                  alt="마커 이미지"
-                  width={48}
-                  height={48}
-                ></Image>
-                <div>
-                  <div className="text-sm font-semibold leading-9 text-gray-900">
-                    {store?.name}
+          stores?.pages.map((page, index) => (
+            <React.Fragment key={index}>
+              <li className="flex justify-between gap-x-6 py-5" key={index}>
+                <div className="flex gap-x-4">
+                  <Image
+                    src={
+                      store?.category
+                        ? `/images/markers/${store?.category}.png`
+                        : "/images/markers/default.png"
+                    }
+                    alt="마커 이미지"
+                    width={48}
+                    height={48}
+                  ></Image>
+                  <div>
+                    <div className="text-sm font-semibold leading-9 text-gray-900">
+                      {store?.name}
+                    </div>
+                    <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
+                      {store?.storeType}
+                    </div>
+                  </div>
+                </div>
+                <div className="hidden sm:flex sm:flex-col sm:items-end">
+                  <div className="text-sm font-semibold leading-6 text-gray-900">
+                    {store.address}
                   </div>
                   <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
-                    {store?.storeType}
+                    {store?.phone || "번호없음"} | {store?.foodCertifyName}
+                    {store?.category}
                   </div>
                 </div>
-              </div>
-              <div className="hidden sm:flex sm:flex-col sm:items-end">
-                <div className="text-sm font-semibold leading-6 text-gray-900">
-                  {store.address}
-                </div>
-                <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
-                  {store?.phone || "번호없음"} | {store?.foodCertifyName}
-                  {store?.category}
-                </div>
-              </div>
-            </li>
+              </li>
+            </React.Fragment>
           ))
         )}
       </ul>
