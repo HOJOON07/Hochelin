@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useRef } from "react";
 import Loading from "@/components/Loading";
 import Pagination from "@/components/Pagination";
 import { StoreApiResonpse, StoreType } from "@/interface";
@@ -6,11 +7,18 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import useIntersectionObserver from "@/hooks/useIntersectionObserver";
+import Loader from "@/components/Loader";
 
 export default function StoreListPage() {
   const router = useRouter();
   const { page = "1" }: any = router.query;
+
+  const ref = useRef<HTMLDivElement | null>(null);
+  const pageRef = useIntersectionObserver(ref, {});
+  const isPageEnd = !!pageRef?.isIntersecting;
+
+  // console.log(pageRef);
 
   // const {
   //   data: stores,
@@ -49,7 +57,22 @@ export default function StoreListPage() {
     initialPageParam: 1,
   });
 
-  console.log(stores);
+  const fetchNext = useCallback(async () => {
+    const res = await fetchNextPage();
+    if (res.isError) {
+      console.log(res.error);
+    }
+  }, [fetchNextPage]);
+
+  useEffect(() => {
+    let timerId: NodeJS.Timeout | undefined;
+    if (isPageEnd && hasNextPage) {
+      timerId = setTimeout(() => {
+        fetchNext();
+      }, 500);
+    }
+    return () => clearTimeout(timerId);
+  }, [fetchNext, isPageEnd, hasNextPage]);
 
   if (isError) {
     return (
@@ -58,6 +81,7 @@ export default function StoreListPage() {
       </div>
     );
   }
+
   return (
     <div className="px-4 md:max-w-4xl mx-auto py-8">
       <ul role="list" className="divide-y divide-gray-100">
@@ -106,9 +130,11 @@ export default function StoreListPage() {
       {/* {stores?.totalPage && (
         <Pagination total={stores.totalPage} page={page}></Pagination>
       )} */}
-      <button type="button" onClick={() => fetchNextPage()}>
+      {/* <button type="button" onClick={() => fetchNextPage()}>
         Next Page
-      </button>
+      </button> */}
+      {(isFetching || hasNextPage || isFetchingNextPage) && <Loader />}
+      <div className="w-full touch-none h-10 mb-10" ref={ref}></div>
     </div>
   );
 }
