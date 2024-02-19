@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import Loading from "@/components/Loading";
 
-import { StoreType } from "@/interface";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { StoreApiResonpse, StoreType } from "@/interface";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 
@@ -25,17 +25,18 @@ export default function StoreListPage() {
   //   isError,
   //   isLoading,
   // } = useQuery({
-  //   queryKey: [`stores-${page}`],
+  //   queryKey: [`stores-${page}`,ㅔㅁ],
   //   queryFn: async () => {
   //     const { data } = await axios(`api/stores?page=${page}`);
   //     return data as StoreApiResonpse;
   //   },
   // });
   const fetchStores = async ({ pageParam = 1 }) => {
-    const { data } = await axios("/api/stores?page=" + pageParam, {
+    const { data } = await axios("/api/stores", {
+      // const { data } = await axios("/api/stores?", {
       params: {
-        limit: 10,
         page: pageParam,
+        limit: 10,
       },
     });
 
