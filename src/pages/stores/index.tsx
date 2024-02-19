@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import Loading from "@/components/Loading";
-import Pagination from "@/components/Pagination";
+
 import { StoreApiResonpse, StoreType } from "@/interface";
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
-import Link from "next/link";
+
 import { useRouter } from "next/router";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
 import Loader from "@/components/Loader";
@@ -25,19 +25,21 @@ export default function StoreListPage() {
   //   isError,
   //   isLoading,
   // } = useQuery({
-  //   queryKey: [`stores-${page}`],
+  //   queryKey: [`stores-${page}`,ㅔㅁ],
   //   queryFn: async () => {
   //     const { data } = await axios(`api/stores?page=${page}`);
   //     return data as StoreApiResonpse;
   //   },
   // });
   const fetchStores = async ({ pageParam = 1 }) => {
-    const { data } = await axios("/api/stores?page=" + pageParam, {
+    const { data } = await axios("/api/stores", {
+      // const { data } = await axios("/api/stores?", {
       params: {
-        limit: 10,
         page: pageParam,
+        limit: 10,
       },
     });
+
     return data;
   };
 
@@ -88,7 +90,7 @@ export default function StoreListPage() {
         {isLoading ? (
           <Loading />
         ) : (
-          stores?.pages.map((page, index) => (
+          stores?.pages?.map((page, index) => (
             <React.Fragment key={index}>
               {page.data.map((store: StoreType, i) => (
                 <li className="flex justify-between gap-x-6 py-5" key={i}>
@@ -99,12 +101,12 @@ export default function StoreListPage() {
                           ? `/images/markers/${store?.category}.png`
                           : "/images/markers/default.png"
                       }
-                      alt="마커 이미지"
                       width={48}
                       height={48}
-                    ></Image>
+                      alt="아이콘 이미지"
+                    />
                     <div>
-                      <div className="text-sm font-semibold leading-9 text-gray-900">
+                      <div className="text-sm font-semibold leading-6 text-gray-900">
                         {store?.name}
                       </div>
                       <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
@@ -114,10 +116,10 @@ export default function StoreListPage() {
                   </div>
                   <div className="hidden sm:flex sm:flex-col sm:items-end">
                     <div className="text-sm font-semibold leading-6 text-gray-900">
-                      {store.address}
+                      {store?.address}
                     </div>
                     <div className="mt-1 text-xs truncate font-semibold leading-5 text-gray-500">
-                      {store?.phone || "번호없음"} | {store?.foodCertifyName}
+                      {store?.phone || "번호없음"} | {store?.foodCertifyName} |{" "}
                       {store?.category}
                     </div>
                   </div>
@@ -127,14 +129,8 @@ export default function StoreListPage() {
           ))
         )}
       </ul>
-      {/* {stores?.totalPage && (
-        <Pagination total={stores.totalPage} page={page}></Pagination>
-      )} */}
-      {/* <button type="button" onClick={() => fetchNextPage()}>
-        Next Page
-      </button> */}
       {(isFetching || hasNextPage || isFetchingNextPage) && <Loader />}
-      <div className="w-full touch-none h-10 mb-10" ref={ref}></div>
+      <div className="w-full touch-none h-10 mb-10" ref={ref} />
     </div>
   );
 }
