@@ -15,7 +15,7 @@ export default function Navbar() {
     <>
       <div className="navbar">
         <Link href="/">
-          <div className="navbar__logo">nextmap</div>
+          <div className="navbar__logo">Hochelin</div>
         </Link>
         <div className="navbar__list">
           <Link href="/stores" className="navbar__list--item">
