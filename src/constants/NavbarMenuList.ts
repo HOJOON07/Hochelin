@@ -11,8 +11,8 @@ export const NAVLIST: NavItem[] = [
     href: "/stores",
   },
   { children: "맛집 등록", href: "/stores/new" },
-  { children: "맛집 가게", href: "/users/likes" },
-  { children: "로그인", href: "/users/login" },
+  { children: "찜한 가게", href: "/users/likes" },
+  // { children: "로그인", href: "/api/auth/signin" },
 ];
 
 // Link href="/stores" className="navbar__list--item">
