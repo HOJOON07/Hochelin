@@ -6,7 +6,9 @@ import GoogleProvider from "next-auth/providers/google";
 import NaverProvider from "next-auth/providers/naver";
 import KakaoProvider from "next-auth/providers/kakao";
 
-const prisma = new PrismaClient();
+import prisma from "@/db";
+
+// const prisma = new PrismaClient();
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
@@ -32,6 +34,11 @@ export const authOptions = {
     // error: "/auth/error", // Error code passed in query string as ?error=
     // verifyRequest: "/auth/verify-request", // (used for check email message)
     // newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
+  },
+  session: {
+    strategy: "jwt" as const,
+    maxAge: 60 * 60 * 24,
+    updateAge: 60 * 60 * 2,
   },
 };
 

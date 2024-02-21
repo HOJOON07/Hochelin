@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Loading from "@/components/Loading";
 
 import { StoreApiResonpse, StoreType } from "@/interface";
@@ -9,6 +9,9 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
 import Loader from "@/components/Loader";
+import SearchFilter from "@/components/SearchFilter";
+import { useRecoilValue } from "recoil";
+import { searchState } from "@/atom";
 
 export default function StoreListPage() {
   const router = useRouter();
@@ -18,25 +21,19 @@ export default function StoreListPage() {
   const pageRef = useIntersectionObserver(ref, {});
   const isPageEnd = !!pageRef?.isIntersecting;
 
-  // console.log(pageRef);
+  const searchValue = useRecoilValue(searchState);
 
-  // const {
-  //   data: stores,
-  //   isError,
-  //   isLoading,
-  // } = useQuery({
-  //   queryKey: [`stores-${page}`,ㅔㅁ],
-  //   queryFn: async () => {
-  //     const { data } = await axios(`api/stores?page=${page}`);
-  //     return data as StoreApiResonpse;
-  //   },
-  // });
+  const searchParams = {
+    q: searchValue?.q,
+    district: searchValue?.district,
+  };
+
   const fetchStores = async ({ pageParam = 1 }) => {
     const { data } = await axios("/api/stores", {
-      // const { data } = await axios("/api/stores?", {
       params: {
         page: pageParam,
         limit: 10,
+        ...searchParams,
       },
     });
 
@@ -52,7 +49,7 @@ export default function StoreListPage() {
     isError,
     isLoading,
   } = useInfiniteQuery({
-    queryKey: ["stores"],
+    queryKey: ["stores", searchParams],
     queryFn: fetchStores,
     getNextPageParam: (lastPage: any) =>
       lastPage.data?.length > 0 ? lastPage.page + 1 : undefined,
@@ -86,14 +83,19 @@ export default function StoreListPage() {
 
   return (
     <div className="px-4 md:max-w-4xl mx-auto py-8">
+      <SearchFilter />
       <ul role="list" className="divide-y divide-gray-100">
         {isLoading ? (
           <Loading />
         ) : (
           stores?.pages?.map((page, index) => (
             <React.Fragment key={index}>
-              {page.data.map((store: StoreType, i) => (
-                <li className="flex justify-between gap-x-6 py-5" key={i}>
+              {page.data.map((store: StoreType, i: number) => (
+                <li
+                  className="flex justify-between gap-x-6 py-5 cursor-pointer hover:bg-gray-50"
+                  key={i}
+                  onClick={() => router.push(`/stores/${store.id}`)}
+                >
                   <div className="flex gap-x-4">
                     <Image
                       src={

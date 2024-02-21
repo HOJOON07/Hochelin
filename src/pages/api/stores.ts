@@ -1,13 +1,21 @@
 import { PrismaClient } from "@prisma/client";
 import { StoreApiResonpse, StoreType } from "./../../interface/index";
 import type { NextApiRequest, NextApiResponse } from "next";
+import prisma from "@/db";
+
+interface ResponseType {
+  page?: string;
+  limit?: string;
+  q?: string;
+  district?: string;
+}
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<StoreApiResonpse | StoreType[] | StoreType>
 ) {
-  const { page = "" }: { page?: string } = req.query;
-  const prisma = new PrismaClient();
+  const { page = "", limit = "", q, district }: ResponseType = req.query;
+  // const prisma = new PrismaClient();
 
   if (page) {
     const count = await prisma.store.count();
@@ -16,6 +24,10 @@ export default async function handler(
       orderBy: { id: "asc" },
       take: 10,
       skip: skipPage * 10,
+      where: {
+        name: q ? { contains: q } : {},
+        address: district ? { contains: district } : {},
+      },
     });
 
     res.status(200).json({
