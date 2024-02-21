@@ -9,13 +9,14 @@ interface ResponseType {
   limit?: string;
   q?: string;
   district?: string;
+  id?: string;
 }
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<StoreApiResonpse | StoreType[] | StoreType | null>
 ) {
-  const { page = "", limit = "", q, district }: ResponseType = req.query;
+  const { page = "", limit = "", q, district, id }: ResponseType = req.query;
 
   // const prisma = new PrismaClient();
 
@@ -38,7 +39,7 @@ export default async function handler(
 
     return res.status(200).json(result);
 
-    //데이터 생성 처리
+    //데이터 수정 처리
   } else if (req.method === "PATCH") {
     const formData = req.body;
     const header = {
@@ -59,7 +60,20 @@ export default async function handler(
       data: { ...formData, lat: data.documents[0].y, lng: data.documents[0].x },
     });
     return res.status(200).json(result);
-  } else {
+  } else if (req.method === "DELETE") {
+    // 삭제 요청
+    if (id) {
+      const result = await prisma.store.delete({
+        where: {
+          id: parseInt(id),
+        },
+      });
+      return res.status(200).json(result);
+    }
+    return res.status(500).json(null);
+  }
+  // 무한 스크롤을 구현할 때 쿼리스트링으로 page가 들어올 때,
+  else {
     if (page) {
       const count = await prisma.store.count();
       const skipPage = parseInt(page) - 1;

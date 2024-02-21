@@ -7,7 +7,8 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+
+import { toast } from "react-toastify";
 
 export default function StoreDetailPage() {
   const router = useRouter();
@@ -44,6 +45,25 @@ export default function StoreDetailPage() {
     return <Loader clasName="mt-[20%]" />;
   }
 
+  const handleDelete = async () => {
+    const confirm = window.confirm("해당 가게를 삭제하시겠습니까?");
+    if (confirm && store) {
+      try {
+        const result = await axios.delete(`/api/stores?id=${store?.id}`);
+
+        if (result.status === 200) {
+          toast.success("가게를 삭제했습니다.");
+          router.replace("/");
+        } else {
+          toast.error("다시 시도해주세요");
+        }
+      } catch (err) {
+        console.log(err);
+        toast.error("다시 시도해주세요");
+      }
+    }
+  };
+
   return (
     <>
       <div className="max-w-5xl mx-auto px-4 py-8">
@@ -56,20 +76,23 @@ export default function StoreDetailPage() {
               {store?.address}
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <Link
-              href={`/stores/${store?.id}/edit`}
-              className="underline  hover:text-gray-400 text-sm"
-            >
-              수정
-            </Link>
-            <button
-              type="button"
-              className="underline hover:text-gray-400 text-sm"
-            >
-              삭제
-            </button>
-          </div>
+          {status === "authenticated" && (
+            <div className="flex items-center gap-4 px-4 py-3">
+              <Link
+                href={`/stores/${store?.id}/edit`}
+                className="underline  hover:text-gray-400 text-sm"
+              >
+                수정
+              </Link>
+              <button
+                type="button"
+                className="underline hover:text-gray-400 text-sm"
+                onClick={handleDelete}
+              >
+                삭제
+              </button>
+            </div>
+          )}
         </div>
         <div className="mt-6 border-t border-gray-100">
           <dl className="divide-y divide-gray-100">
