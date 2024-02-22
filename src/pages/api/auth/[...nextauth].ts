@@ -6,7 +6,6 @@ import NaverProvider from "next-auth/providers/naver";
 import KakaoProvider from "next-auth/providers/kakao";
 
 import prisma from "@/db";
-import { use } from "react";
 
 // const prisma = new PrismaClient();
 
