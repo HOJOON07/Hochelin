@@ -1,8 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 import { StoreApiResonpse, StoreType } from "./../../interface/index";
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/db";
 import axios from "axios";
+
+import { getServerSession } from "next-auth";
+import { authOptions } from "./auth/[...nextauth]";
 
 interface ResponseType {
   page?: string;
@@ -17,6 +20,7 @@ export default async function handler(
   res: NextApiResponse<StoreApiResonpse | StoreType[] | StoreType | null>
 ) {
   const { page = "", limit = "", q, district, id }: ResponseType = req.query;
+  const session = await getServerSession(req, res, authOptions);
 
   // const prisma = new PrismaClient();
 
@@ -95,10 +99,17 @@ export default async function handler(
       });
     } else {
       const { id }: { id?: string } = req.query;
+      // console.log(session);
+
       const stores = await prisma.store.findMany({
         orderBy: { id: "asc" },
         where: {
           id: id ? parseInt(id) : {},
+        },
+        include: {
+          likes: {
+            where: session ? { userId: parseInt(session.user.id) } : {},
+          },
         },
       });
 
