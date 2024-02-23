@@ -2,8 +2,9 @@ import Link from "next/link";
 interface Pagination {
   total: number;
   page: string;
+  pathname: string;
 }
-export default function Pagination({ total, page }: Pagination) {
+export default function Pagination({ total, page, pathname }: Pagination) {
   return (
     <div className="py-6 w-full px-10 flex justify-center gap-3 bg-white my-10 flex-wrap text-black">
       {total <= 10 ? (
@@ -11,7 +12,7 @@ export default function Pagination({ total, page }: Pagination) {
           return (
             <Link
               href={{
-                pathname: `/stores`,
+                pathname: pathname,
                 query: { page: i + 1 },
               }}
               key={i}
@@ -33,7 +34,7 @@ export default function Pagination({ total, page }: Pagination) {
           {parseInt(page) > 1 && (
             <Link
               href={{
-                pathname: `/stores`,
+                pathname: pathname,
                 query: { page: parseInt(page) - 1 },
               }}
             >
@@ -44,7 +45,7 @@ export default function Pagination({ total, page }: Pagination) {
           )}
           <Link
             href={{
-              pathname: `/stores`,
+              pathname: pathname,
               query: { page: parseInt(page) },
             }}
           >
