@@ -63,6 +63,7 @@ export default async function handler(
       skip: skipPage * limit,
       take: limit,
     });
+    console.log(likes);
     return res.status(200).json({
       data: likes,
       page: parseInt(page),
