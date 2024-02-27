@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 
 import { NextLayout, NextProvider } from "./provider";
 import { Metadata } from "next";
+import GoogleAnalytics from "./googleAnalytics";
 
 export const metadata: Metadata = {
   title: "Hochelin",
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <GoogleAnalytics GA_TRACKING_ID={process.env.NEXT_PUBLIC_GA_ID} />
         <NextProvider>
           <NextLayout>{children}</NextLayout>
         </NextProvider>
