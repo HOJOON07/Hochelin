@@ -4,20 +4,22 @@ import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import CommentForm from "./CommentForm";
-import { useRouter } from "next/router";
+
 import { CommentApiResponse } from "@/interface";
 import { useQuery } from "@tanstack/react-query";
-import { comment } from "postcss";
+
 import CommentList from "./CommentList";
 import Pagination from "../Pagination";
 
 interface CommentProps {
   storeId: number;
+  params?: {
+    page?: string;
+  };
 }
-export default function Comments({ storeId }: CommentProps) {
+export default function Comments({ storeId, params }: CommentProps) {
   const { status } = useSession();
-  const router = useRouter();
-  const { page } = router.query;
+  const page = params?.page || "1";
   const propsPage = page as string;
 
   const fetchCommnets = async () => {
@@ -35,7 +37,7 @@ export default function Comments({ storeId }: CommentProps) {
     queryFn: fetchCommnets,
   });
 
-  console.log(comments);
+  // console.log(comments);
   return (
     <div className="md:max-w-2xl py8 px-2 mb-20 mx-auto">
       {status === "authenticated" && (

@@ -1,10 +1,5 @@
-import React, {
-  Suspense,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+"use client";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Loading from "@/components/Loading";
 
 import { StoreApiResonpse, StoreType } from "@/interface";
@@ -12,7 +7,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import useIntersectionObserver from "@/hooks/useIntersectionObserver";
 import Loader from "@/components/Loader";
 import SearchFilter from "@/components/SearchFilter";
@@ -22,7 +17,6 @@ import StoreList from "@/components/StoreList";
 
 export default function StoreListPage() {
   const router = useRouter();
-  const { page = "1" }: any = router.query;
 
   const ref = useRef<HTMLDivElement | null>(null);
   const pageRef = useIntersectionObserver(ref, {});

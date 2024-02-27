@@ -1,22 +1,9 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
+"use client";
 import AddressSearch from "@/components/AddressSearch";
 import { CATEGORY_ARR, FOOD_CERTIFY_ARR, STORE_TYPE_ARR } from "@/data/store";
 import { StoreType } from "@/interface";
 import axios from "axios";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -33,10 +20,9 @@ export default function StoreNew() {
     <form
       className="px-4 md:max-w-4xl mx-auto py-8"
       onSubmit={handleSubmit(async (data) => {
-        console.log(data);
         try {
           const result = await axios.post("/api/stores", data);
-          console.log(result);
+          // console.log(result);
 
           if (result.status === 200) {
             toast.success("맛집을 등록했습니다.");

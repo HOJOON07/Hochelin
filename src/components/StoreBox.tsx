@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction } from "react";
+"use client";
+
 import Image from "next/image";
 import {
   AiOutlineClose,
@@ -7,8 +8,8 @@ import {
   AiOutlinePhone,
 } from "react-icons/ai";
 import { HiOutlineMap } from "react-icons/hi";
-import { StoreType } from "@/interface";
-import { useRouter } from "next/router";
+
+import { useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
 import { currentStoreState } from "@/atom";
 import Like from "./Like";

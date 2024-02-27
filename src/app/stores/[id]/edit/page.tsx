@@ -1,30 +1,17 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
+"use client";
 import AddressSearch from "@/components/AddressSearch";
 import Loader from "@/components/Loader";
 import { CATEGORY_ARR, FOOD_CERTIFY_ARR, STORE_TYPE_ARR } from "@/data/store";
 import { StoreType } from "@/interface";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-export default function StoreEditPage() {
+export default function StoreEditPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const { id } = router.query;
+  const id = params.id;
 
   const fetchStore = async () => {
     const { data } = await axios(`/api/stores?id=${id}`);
@@ -62,7 +49,7 @@ export default function StoreEditPage() {
   }
 
   if (isSuccess) {
-    console.log(store);
+    // console.log(store);
     setValue("name", store.name);
     setValue("phone", store.phone);
     setValue("lat", store.lat);
@@ -83,7 +70,7 @@ export default function StoreEditPage() {
             ...data,
             id: store?.id,
           });
-          console.log(result);
+          // console.log(result);
 
           if (result.status === 200) {
             toast.success("맛집을 수정했습니다.");
