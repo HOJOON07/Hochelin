@@ -5,12 +5,17 @@ import { CommentApiResponse } from "@/interface";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession, signOut } from "next-auth/react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-export default function MyPage({ params }: { params: { page: string } }) {
+export default function MyPage({
+  searchParams,
+}: {
+  searchParams: { page: string };
+}) {
   const { data: session } = useSession();
 
-  const page = params.page || "1";
+  const page = searchParams.page || "1";
   const propsPage = page as string;
 
   const fetchCommnets = async () => {
@@ -60,7 +65,7 @@ export default function MyPage({ params }: { params: { page: string } }) {
               이미지
             </dt>
             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              <img
+              <Image
                 alt="프로필 이미지"
                 width={48}
                 height={48}

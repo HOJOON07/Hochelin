@@ -14,11 +14,15 @@ import React from "react";
 
 import { toast } from "react-toastify";
 
+interface StoreDetailProps {
+  params: { id: string };
+  searchParams: { page: string };
+}
+
 export default function StoreDetailPage({
   params,
-}: {
-  params: { id: string };
-}) {
+  searchParams,
+}: StoreDetailProps) {
   const router = useRouter();
   const id = params.id;
 
@@ -170,7 +174,7 @@ export default function StoreDetailPage({
             <Map lat={store?.lat} lng={store.lng} zoom={1}></Map>
             <Marker store={store} />
           </div>
-          <Comments storeId={store.id} />
+          <Comments storeId={store.id} page={searchParams.page} />
         </React.Fragment>
       )}
     </>

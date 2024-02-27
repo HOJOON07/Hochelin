@@ -73,7 +73,7 @@ export default function Markers({ stores }: MarkerProps) {
         });
       });
     }
-  }, [map, setCurrentStore, stores]);
+  }, [location, map, setCurrentStore, setLocation, stores]);
   useEffect(() => {
     loadKakaoMarkers();
   }, [map, loadKakaoMarkers]);

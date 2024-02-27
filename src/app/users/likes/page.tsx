@@ -8,11 +8,15 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
 
-export default function LikesPage({ parmas }: { parmas: { page: string } }) {
+export default function LikesPage({
+  searchParams,
+}: {
+  searchParams: { page: string };
+}) {
   // const page = Array.isArray(router.query.page)
   //   ? router.query.page[0]
   //   : router.query.page || "1";
-  const page = parmas?.page || "1";
+  const page = searchParams?.page || "1";
 
   const fetchLikes = async () => {
     const { data } = await axios(`/api/likes?page=${page}`);

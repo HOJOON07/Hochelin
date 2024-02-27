@@ -1,6 +1,7 @@
 import { CommentApiResponse } from "@/interface";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { toast } from "react-toastify";
 
@@ -45,7 +46,7 @@ export default function CommentList({
             className="flex space-x-4 text-sm text-gray-500 mb-8 item-center border-b border-gray-100 pb-8"
           >
             <div>
-              <img
+              <Image
                 className="rounde-full bg-gray-10"
                 src={comment.user?.image || "/images/markers/default.png"}
                 alt="유저 이미지"
