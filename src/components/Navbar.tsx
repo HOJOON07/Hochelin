@@ -40,6 +40,7 @@ export default function Navbar() {
             </Link>
           )}
         </div>
+
         {/* 모바일에서만 보이는 버튼 */}
         <div
           role="presentation"
