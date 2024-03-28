@@ -11,7 +11,7 @@ export default function SearchFilter() {
 
   const [debouncedSearch, setDebouncedSearch] = useDebounceValue(
     search?.q,
-    2000
+    800
   ); // 사용자 입력을 디바운싱
 
   // 사용자 입력 처리
